@@ -29,13 +29,14 @@ func main() {
 
 func CreateWinModuleInformationList(baseDirectory string) []*WinModuleInformation {
 	var list []*WinModuleInformation
+	var tagetExt = map[string]int{".exe": 1, ".dll": 2}
 
 	filepath.Walk(baseDirectory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if !info.IsDir() {
-			if strings.ToLower(filepath.Ext(path)) == ".exe" || strings.ToLower(filepath.Ext(path)) == ".dll" {
+			if tagetExt[strings.ToLower(filepath.Ext(path))] != 0 {
 				list = append(list, NewWinModuleInformation(path, info.Size()))
 			}
 		}
